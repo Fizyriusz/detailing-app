@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotation Form</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    form { max-width: 600px; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 6px; margin-top: 4px; box-sizing: border-box; }
+    button { margin-top: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Service Quotation</h1>
+  <form id="quoteForm">
+    <fieldset>
+      <legend>Client Details</legend>
+      <label>Name <input type="text" id="clientName" required></label>
+      <label>Email <input type="email" id="clientEmail" required></label>
+      <label>Phone <input type="tel" id="clientPhone" required></label>
+    </fieldset>
+    <fieldset>
+      <legend>Vehicle Information</legend>
+      <label>Make <input type="text" id="vehicleMake" required></label>
+      <label>Model <input type="text" id="vehicleModel" required></label>
+      <label>Year <input type="number" id="vehicleYear" required></label>
+    </fieldset>
+    <fieldset>
+      <legend>Service Scope</legend>
+      <textarea id="serviceScope" rows="4" required></textarea>
+    </fieldset>
+    <fieldset>
+      <legend>Proposed Dates</legend>
+      <label>Preferred Date <input type="date" id="preferredDate" required></label>
+    </fieldset>
+    <button type="button" id="generatePdf">Generate PDF</button>
+  </form>
+
+  <script>
+    document.getElementById('generatePdf').addEventListener('click', () => {
+      const {{ jsPDF }} = window.jspdf;
+      const doc = new jsPDF();
+      const name = document.getElementById('clientName').value;
+      const email = document.getElementById('clientEmail').value;
+      const phone = document.getElementById('clientPhone').value;
+      const make = document.getElementById('vehicleMake').value;
+      const model = document.getElementById('vehicleModel').value;
+      const year = document.getElementById('vehicleYear').value;
+      const scope = document.getElementById('serviceScope').value;
+      const date = document.getElementById('preferredDate').value;
+
+      let y = 10;
+      doc.setFontSize(16);
+      doc.text('Service Quotation', 10, y);
+      y += 10;
+      doc.setFontSize(12);
+
+      doc.text('Client Details:', 10, y); y += 6;
+      doc.text(`Name: ${name}`, 10, y); y += 6;
+      doc.text(`Email: ${email}`, 10, y); y += 6;
+      doc.text(`Phone: ${phone}`, 10, y); y += 10;
+
+      doc.text('Vehicle Information:', 10, y); y += 6;
+      doc.text(`Make: ${make}`, 10, y); y += 6;
+      doc.text(`Model: ${model}`, 10, y); y += 6;
+      doc.text(`Year: ${year}`, 10, y); y += 10;
+
+      doc.text('Service Scope:', 10, y); y += 6;
+      doc.text(scope, 10, y); y += 10;
+
+      doc.text('Proposed Date:', 10, y); y += 6;
+      doc.text(date, 10, y);
+
+      doc.save('quotation.pdf');
+    });
+  </script>
+</body>
+</html>
